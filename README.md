@@ -7,6 +7,8 @@ A simple virtual agent template that uses IBM conversation API.
 >Fill the credentials for init watson conversation service
 
 ```javascript
+//Server.js
+
 //Conversation Service Credentials
 var conversation = watson.conversation({
   username: 'fill your conversation service username id here',
