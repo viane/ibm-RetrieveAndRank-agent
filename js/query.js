@@ -22,14 +22,10 @@ $('#querySubmitBtn').click(function() {
             }
             , 125);
             var respond="<li class='agent'>";
-            console.log(data);
-            if(data.status=="conversation"){//from conversation
-                for (var i=0;i < data.result.length;i++) {
-                    respond+="<p>"+ data.result[i]+ "</p>";
-                }
-            }else{
-                
-            }
+
+            //extracting answer body and form DOM element
+            respond+="<p>"+ data.result.response.docs[0].body + "</p>";
+
             respond+="</li>";
             chatWindow.append(respond);
             scrollChatWindowToBottom();
@@ -51,8 +47,6 @@ $('#userQueryInput').keypress(function(e){
 })
 
 var scrollChatWindowToBottom=function() {
-    $(".chat-thread").animate( {
-        scrollTop: $(".chat-thread").height()
-    }
-    , 800);
+    var $target = $('.chat-thread');
+$target.animate({scrollTop: 3*$target.height()+1000}, 1000);
 }

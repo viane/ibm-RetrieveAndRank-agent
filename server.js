@@ -22,37 +22,20 @@ router.use(bodyParser.urlencoded({
   extended: true
 }));
 
-//init watson conversation service
-var conversation = watson.conversation({
-  username: 'fill your conversation service username id here',
-  password: 'fill your conversation service password here',
-  version: 'v1',
-  version_date: '2016-07-11'
-});
-
-var WorkspaceID = 'fill your workspace id here'; 
-
-//global conversation variables
-var dialog_stack = ["root"],
-  dialog_turn_counter = 1,
-  dialog_request_counter = 1;
-
-//we will do this later
-// var retrieve_and_rank = watson.retrieve_and_rank({
-//   username: '{username}',
-//   password: '{password}',
-//   version: 'v1'
+// //init watson conversation service
+// var conversation = watson.conversation({
+//   username: 'fill your conversation service username id here',
+//   password: 'fill your conversation service password here',
+//   version: 'v1',
+//   version_date: '2016-07-11'
 // });
-
-// var rrparams = {
-//   cluster_id: '{}',
-//   collection_name: '{}'
-// };
-
-// var solrClient = retrieve_and_rank.createSolrClient(rrparams);
-
-// var ranker_id = '{}', rrquestion;
-
+//
+// var WorkspaceID = 'fill your workspace id here';
+//
+// //global conversation variables
+// var dialog_stack = ["root"],
+//   dialog_turn_counter = 1,
+//   dialog_request_counter = 1;
 
 router.get('/', function(req, res) {
   fs.readFile('index.html', 'utf8', function(err, data) {
@@ -119,66 +102,86 @@ router.get('/img/*', function(req, res) {
   });
 });
 
+//getting serice credentials from local json file
+var crendtials = JSON.parse(fs.readFileSync('credentials.json', 'utf8'));
+
+var retrieve_and_rank = watson.retrieve_and_rank({
+  username: crendtials.retrieve_and_rank.username,
+  password: crendtials.retrieve_and_rank.password,
+  version: 'v1'
+});
+var ranker_id = crendtials.retrieve_and_rank.ranker_id;
+
+var rrparams = {
+  cluster_id: crendtials.rrparams.cluster_id,
+  collection_name: crendtials.rrparams.collection_name
+};
+
+var solrClient = retrieve_and_rank.createSolrClient(rrparams);
 
 router.get("/query", function(req, res) {
   //store what user submit
   var queryString = req.query.input;
+  console.log("client asked: " + queryString);
 
-  conversation.message({
-    input: {
-      "text": queryString
-    },
-    context: {
-      "conversation_id": "1",
-      "system": {
-        "dialog_stack": dialog_stack,
-        "dialog_turn_counter": dialog_turn_counter,
-        "dialog_request_counter": dialog_request_counter
-      }
-    },
-    workspace_id: WorkspaceID
-  }, function(err, response) {
-    if (err) {
-      console.log('error:', err);
-    }
-    else {
-      //handle conversation responds
-      var conversationResponseText = response.output.text[0]; //response text is always in a array
-      
-      res.send({
-          "status": 'conversation',
-          "result": response.output.text
-        });
-      
+  ///////////////////////////
+  //Conversation service
+  ///////////////////////////
 
-          // handle retrieve and rank
-          //      var query = qs.stringify({
-          //   q: queryString,  
-          //   ranker_id: ranker_id,
-          //   fl: 'id,answer_id,score,confidence,title,body'
-          // });
-          // solrClient.get('fcselect', query, function(err, searchResponse) {
-          //   if (err) {
-          //     console.log(err);
-          //   }
-          //   else {
-          //     //console.log(JSON.stringify(searchResponse.response.docs, null, 2));
-          //     res.send({
-          //       "status": 'retrive_and_rank',
-          //       "result": searchResponse
-          //     });
-          //   }
-          // });
+  // conversation.message({
+  //   input: {
+  //     "text": queryString
+  //   },
+  //   context: {
+  //     "conversation_id": "1",
+  //     "system": {
+  //       "dialog_stack": dialog_stack,
+  //       "dialog_turn_counter": dialog_turn_counter,
+  //       "dialog_request_counter": dialog_request_counter
+  //     }
+  //   },
+  //   workspace_id: WorkspaceID
+  // }, function(err, response) {
+  //   if (err) {
+  //     console.log('error:', err);
+  //   }
+  //   else {
+  //     //handle conversation responds
+  //     var conversationResponseText = response.output.text[0]; //response text is always in a array
+  //
+  //     res.send({
+  //         "status": 'conversation',
+  //         "result": response.output.text
+  //       });
 
+  //     //update dialog path
+  //     dialog_stack = response.context.system.dialog_stack;
+  //     dialog_turn_counter = response.context.system.dialog_turn_counter;
+  //     dialog_request_counter = response.context.system.dialog_request_counter;
+  //   }
+  // });
 
-      //update dialog path
-      dialog_stack = response.context.system.dialog_stack;
-      dialog_turn_counter = response.context.system.dialog_turn_counter;
-      dialog_request_counter = response.context.system.dialog_request_counter;
-    }
-  });
+            /////////////////////////////////////
+            // retrieve and rank
+            /////////////////////////////////////
 
-
+            var query = qs.stringify({
+              q: queryString,
+              ranker_id: ranker_id,
+              fl: 'id,answer_id,score,confidence,title,body'
+            });
+            solrClient.get('fcselect', query, function(err, searchResponse) {
+              if (err) {
+                console.log(err);
+              }
+              else {
+                console.log(JSON.stringify(searchResponse.response.docs, null, 2));
+                res.send({
+                  "status": 'retrive_and_rank',
+                  "result": searchResponse
+                });
+              }
+            });
 });
 
 
