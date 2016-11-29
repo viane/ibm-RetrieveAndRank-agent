@@ -4,6 +4,7 @@ A simple virtual chat agent template that uses IBM <b>Retrieve and Rank service<
 
 ## Setup
 
+<<<<<<< HEAD
 >Fill the credentials in the <b>credentials.json file</b>, in order to enable retrieve and rank service
 
 ```json
@@ -18,6 +19,23 @@ A simple virtual chat agent template that uses IBM <b>Retrieve and Rank service<
   "collection_name":"fill here"
   }
 }
+=======
+>Fill the credentials for init watson conversation service
+
+```javascript
+//Server.js
+
+//Conversation Service Credentials
+var conversation = watson.conversation({
+  username: 'fill your conversation service username id here',
+  password: 'fill your conversation service password here',
+  version: 'v1',
+  version_date: '2016-07-11'
+});
+
+//Conversation workspace_id
+var WorkspaceID = 'fill your workspace id here';
+>>>>>>> origin/master
 ```
 
 >1.To get your Retrieve and Rank <b>username</b> and <b>password</b>.
@@ -48,6 +66,10 @@ $ cd ibm-conversation-agent
 $ npm install -d
 $ node server
 ```
+<<<<<<< HEAD
 
 ## Test
 Goto [localhost:3000](127.0.0.1:3000/)
+=======
+Goto [localhost:3000](127.0.0.1:3000/)
+>>>>>>> origin/master
