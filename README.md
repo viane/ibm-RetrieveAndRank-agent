@@ -1,6 +1,6 @@
 # ibm-conversation-agent
 
-A simple virtual agent template that uses IBM conversation API.
+A simple virtual chat agent template that uses IBM <b>Retrieve and Rank service</b> API.
 
 ## Setup
 
