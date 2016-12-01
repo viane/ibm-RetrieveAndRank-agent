@@ -4,7 +4,7 @@ A simple virtual chat agent template that uses IBM <b>Retrieve and Rank service<
 
 ## Setup
 
->Fill the credentials in the <b>credentials.json file</b>, in order to enable retrieve and rank service
+>Fill the credentials in the <b>credentials.json</b> file, in order to enable retrieve and rank service
 
 ```json
 {
