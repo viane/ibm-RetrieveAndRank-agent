@@ -32,7 +32,7 @@ body {
   position: absolute;
   height: 66%;
   top: 25px;
-  width: 52%;
+  width: 85%;
 }
 
 .chat-thread li {
@@ -120,9 +120,10 @@ body {
 }
 
 .chat-window-message {
-  text-align: center;
+  text-indent: 20px;
+  text-align: left;
   overflow-wrap: break-word;
-  min-width: 50%;
+  min-width: 80%;
   max-width: 100%;
   height: 53px;
   font: 32px/48px 'Noto Sans', sans-serif;
@@ -160,7 +161,7 @@ body {
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 75%;
+    width: 85%;
   }
 }
 @keyframes show-chat-even {
