@@ -1,4 +1,4 @@
-# ibm-conversation-agent
+# ibm-RetrieveAndRank-agent
 
 A simple virtual chat agent template that uses IBM <b>Retrieve and Rank service</b> API.
 
