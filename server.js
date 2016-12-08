@@ -9,7 +9,6 @@ var watson = require('watson-developer-cloud');
 var qs = require('qs'); //  Use a querystring parser to encode output.
 
 var router = express();
-var server = http.createServer(router);
 var root = __dirname;
 
 
@@ -186,7 +185,6 @@ router.get("/query", function(req, res) {
 
 
 
-server.listen(process.env.PORT || 3000, process.env.IP || "localhost", function() {
-  var addr = server.address();
-  console.log("Chat server listening at", addr.address + ":" + addr.port);
+router.listen(process.env.PORT, function() {
+  console.log("Server Started");
 });
